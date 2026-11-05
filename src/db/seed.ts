@@ -1,3 +1,4 @@
+import { pathToFileURL } from "url";
 import { pool } from "./client.js";
 import { generateDeterministicEmbedding } from "../providers/types.js";
 
@@ -127,7 +128,7 @@ export async function seedMemories(): Promise<number> {
 }
 
 // Execute directly if run via CLI
-if (process.argv[1] && process.argv[1].endsWith("seed.ts")) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   seedMemories()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));

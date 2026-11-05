@@ -2,7 +2,37 @@
 
 # Minimal RAG Memory Service
 
+[![CI](https://github.com/qproyect/rag-memory-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/qproyect/rag-memory-starter/actions/workflows/ci.yml)
+
 A clean, production-grade Retrieval-Augmented Generation (RAG) memory microservice built with **Node.js 20**, **TypeScript (strict)**, **Fastify**, and **PostgreSQL 16 + pgvector**.
+
+---
+
+## Try it in 2 minutes
+
+Start the service and database:
+```bash
+docker compose up --build -d
+```
+
+Seed 20 sample public-domain notes into PostgreSQL:
+```bash
+docker compose exec app npm run db:seed:prod
+```
+
+Run a hybrid search query (`POST /query`):
+```bash
+curl -X POST http://localhost:3000/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "temperature controlled water cooking", "topK": 3}'
+```
+
+Generate a structured RAG answer with citation validation (`POST /answer`):
+```bash
+curl -X POST http://localhost:3000/answer \
+  -H "Content-Type: application/json" \
+  -d '{"query": "How does sous-vide cooking work?", "topK": 2}'
+```
 
 This repository demonstrates applied AI engineering patterns for long-term agent memory:
 1. **Hybrid Retrieval**: PostgreSQL full-text search (`tsvector`) combined with semantic vector search (`pgvector` cosine distance).
@@ -62,7 +92,7 @@ The database (`pgvector/pgvector:pg16`) and the Fastify app will start up. Datab
 To populate the database with 20 sample public-domain notes (cooking science, world history, travel geography):
 
 ```bash
-docker compose exec app npm run db:seed
+docker compose exec app npm run db:seed:prod
 ```
 
 Or when running locally:

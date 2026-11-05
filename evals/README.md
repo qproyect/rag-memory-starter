@@ -37,6 +37,13 @@ Deterministic evaluation using isolated test doubles (no external network depend
 
 ## Running the Evals Locally
 
+### Prerequisites
+- Node.js 20+ installed
+- Dependencies installed:
+```bash
+npm install
+```
+
 ### Safety Guard
 The evaluation suite runs database migrations and executes `TRUNCATE memories` before seeding the golden corpus. To protect production and development data, the runner **refuses to run** unless:
 1. The database name in `DATABASE_URL` ends in `_eval` or `_test`, OR
