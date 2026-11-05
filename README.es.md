@@ -163,7 +163,7 @@ curl -X POST http://localhost:3000/answer \
   "data": {
     "answer": "Deterministic mock answer responding to context.",
     "confidence": 0.95,
-    "citations": ["seed-1", "seed-2"],
+    "citations": ["7f093256-42bb-4144-8c88-e24c084777b7"],
     "summary": "Synthetic mock summary generated without external network dependencies."
   },
   "context": [
@@ -232,6 +232,40 @@ Revisá `.env.example` para conocer las variables de configuración disponibles:
 | `OPENAI_API_KEY` | Clave de API de OpenAI (opcional) | - |
 | `OPENAI_BASE_URL` | Endpoint compatible con OpenAI | `https://api.openai.com/v1` |
 | `OLLAMA_BASE_URL` | Endpoint local de Ollama | `http://localhost:11434` |
+
+---
+
+## Evaluación
+
+Este repositorio incluye una suite de evaluación reproducible que mide la precisión de recuperación entre diferentes estrategias, la confiabilidad de las respuestas generadas y la robustez de los proveedores. Las evaluaciones se ejecutan en GitHub Actions en cada pull request utilizando el `MockProvider` determinístico sin dependencias externas.
+
+Consultá [evals/README.md](evals/README.md) para la documentación técnica completa, opciones de CLI y configuración con Ollama.
+
+### Resultados de Referencia (Mock Provider, K=5)
+
+Los detalles completos de la corrida se encuentran en [evals/BASELINE.md](evals/BASELINE.md).
+
+#### Comparativa de Modos de Recuperación
+| Modo de Recuperación | Recall@5 | MRR | NDCG@5 | HitRate@5 | Consultas |
+|---|---|---|---|---|---|
+| **Híbrido (RRF)** | **0.6563** | **0.5104** | **0.5484** | **0.6563** | 32 |
+| **Solo Vectorial** | 0.4063 | 0.2734 | 0.3070 | 0.4063 | 32 |
+| **Solo Texto**     | 0.3750 | 0.3750 | 0.3750 | 0.3750 | 32 |
+
+#### Confiabilidad de Respuestas y Robustez de Proveedores
+| Métrica | Medición Base | Objetivo / Estándar |
+|---|---|---|
+| Tasa de Esquema Válido | 100.0% | Validación estricta con Zod |
+| Tasa de Reintentos de Autocorrección | 0.0% | Recuperación con feedback de error |
+| Validez de Citas | 100.0% | Sin citas alucinadas (todas en el contexto recuperado) |
+| Recall de Citas | 62.5% | Documentos objetivo citados (límite de 2) |
+| Tasa de Recuperación de Proveedores | 100.0% | Resiliencia ante markdown fences, errores de sintaxis y failover |
+
+### Limitaciones de la Evaluación
+- **Embedder Mock**: El proveedor mock calcula hashes determinísticos de tokens y no representaciones semánticas continuas. Las métricas de paráfrasis bajo el mock subestiman las capacidades de un modelo de embeddings real; ejecutá las evaluaciones con Ollama (`all-minilm`) para medir números semánticos continuos.
+- **Conjunción FTS en PostgreSQL (`plainto_tsquery`)**: La búsqueda textual con `plainto_tsquery` une todos los términos con `&` (AND). Las consultas con términos que no coexisten textualmente en las notas objetivo devuelven 0 resultados en modo solo-texto. Incorporar coincidencia léxica flexible de tipo OR (mediante construcción de `tsquery` con `|`) queda registrado como trabajo futuro.
+- **Tamaño del Conjunto de Datos**: El dataset golden cuenta con 38 consultas y 30 documentos.
+- **Evaluación mediante LLM (LLM-as-a-Judge)**: La fidelidad y fundamentación de respuestas se valida actualmente por validez de citas y restricciones de esquema; una métrica automatizada de fidelidad mediante LLM-as-a-judge está planificada como trabajo futuro.
 
 ---
 

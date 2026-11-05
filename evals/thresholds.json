@@ -1,0 +1,8 @@
+{
+  "$comment": "Per-metric minimums for the mock-provider CI regression guard. Values are set to measured baseline minus 0.05, rounded down. These are regression guards, not quality claims.",
+  "retrieval_hybrid_recall_at_5": 0.60,
+  "retrieval_hybrid_mrr": 0.46,
+  "schema_valid_rate": 0.95,
+  "citation_validity": 0.95,
+  "robustness_recovery": 0.95
+}

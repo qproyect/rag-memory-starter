@@ -165,7 +165,7 @@ curl -X POST http://localhost:3000/answer \
   "data": {
     "answer": "Deterministic mock answer responding to context.",
     "confidence": 0.95,
-    "citations": ["seed-1", "seed-2"],
+    "citations": ["7f093256-42bb-4144-8c88-e24c084777b7"],
     "summary": "Synthetic mock summary generated without external network dependencies."
   },
   "context": [
@@ -240,6 +240,40 @@ See `.env.example` for all configurable environment variables:
 | `OPENAI_API_KEY` | OpenAI API key (optional) | - |
 | `OPENAI_BASE_URL` | OpenAI-compatible endpoint | `https://api.openai.com/v1` |
 | `OLLAMA_BASE_URL` | Local Ollama endpoint | `http://localhost:11434` |
+
+---
+
+## Evaluation
+
+This repository includes a reproducible evaluation suite measuring retrieval accuracy across strategies, answer reliability, and provider resilience. Evals run in GitHub Actions on every pull request using the zero-dependency `MockProvider`.
+
+See [evals/README.md](evals/README.md) for full benchmark documentation, CLI options, and local Ollama setup.
+
+### Committed Baseline Results (Mock Provider, K=5)
+
+Full run details available in [evals/BASELINE.md](evals/BASELINE.md).
+
+#### Retrieval Modes Comparison
+| Retrieval Mode | Recall@5 | MRR | NDCG@5 | HitRate@5 | Queries |
+|---|---|---|---|---|---|
+| **Hybrid (RRF)** | **0.6563** | **0.5104** | **0.5484** | **0.6563** | 32 |
+| **Vector Only**  | 0.4063 | 0.2734 | 0.3070 | 0.4063 | 32 |
+| **Text Only**    | 0.3750 | 0.3750 | 0.3750 | 0.3750 | 32 |
+
+#### Answer Reliability & Provider Robustness
+| Metric | Measured Baseline | Target / Standard |
+|---|---|---|
+| Schema Valid Rate | 100.0% | Strict Zod validation |
+| Self-Correction Retry Rate | 0.0% | Error-feedback recovery |
+| Citation Validity | 100.0% | Zero hallucinated citations (all from retrieved context) |
+| Citation Recall | 62.5% | Relevant gold documents cited (capped at 2) |
+| Provider Recovery Rate | 100.0% | Resilient across fences, syntax errors, and failovers |
+
+### Evaluation Limitations
+- **Mock Embedder**: The mock embedder computes deterministic token hashes rather than learned semantic vectors. Paraphrase retrieval scores under the mock provider understate true continuous embedding model capabilities; run against Ollama (`all-minilm`) for real continuous embeddings.
+- **PostgreSQL FTS Conjunction (`plainto_tsquery`)**: Full-text search with `plainto_tsquery` strictly ANDs all search terms (`&`). Queries containing terms not all present simultaneously in target documents (e.g. paraphrase or detailed queries) return 0 results in text-only mode. Adding OR-style lexical matching (e.g. constructing `tsquery` with `|`) is tracked as future work.
+- **Dataset Size**: The golden evaluation dataset comprises 38 queries and 30 documents.
+- **LLM-as-a-Judge**: Groundedness is currently verified through citation validity and schema checks; automated LLM-as-a-judge faithfulness scoring is planned as future work.
 
 ---
 

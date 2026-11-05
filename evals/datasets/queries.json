@@ -1,0 +1,240 @@
+[
+  {
+    "id": "q-exact-01",
+    "query": "Lactobacillus fermentation starter",
+    "category": "exact_keyword",
+    "relevantIds": ["0b1216eb-2b75-46ce-9c8e-eb87b08ed307"]
+  },
+  {
+    "id": "q-exact-02",
+    "query": "Rosetta Stone ancient Egyptian hieroglyphs",
+    "category": "exact_keyword",
+    "relevantIds": ["0ff6d387-50b8-41d7-bfd5-e8bd40e2f64d"]
+  },
+  {
+    "id": "q-exact-03",
+    "query": "Maillard reaction amino acids reducing sugars",
+    "category": "exact_keyword",
+    "relevantIds": ["273e840c-673b-4c7b-8f63-f008c3672c34"]
+  },
+  {
+    "id": "q-exact-04",
+    "query": "Gutenberg movable-type printing press Mainz",
+    "category": "exact_keyword",
+    "relevantIds": ["cf9f35ad-5312-43dd-bef9-5b4fc54db693"]
+  },
+  {
+    "id": "q-exact-05",
+    "query": "Machu Picchu Inca citadel Eastern Cordillera",
+    "category": "exact_keyword",
+    "relevantIds": ["c0c0731f-2dcf-4d53-98af-9a9e2ab4329a"]
+  },
+  {
+    "id": "q-exact-06",
+    "query": "Serengeti National Park wildebeest Mara River migration",
+    "category": "exact_keyword",
+    "relevantIds": ["d7bebee3-7b2a-4639-a85b-1ef8529f0883"]
+  },
+  {
+    "id": "q-exact-07",
+    "query": "Superconductivity zero electrical resistance transition temperature",
+    "category": "exact_keyword",
+    "relevantIds": ["4498a9fd-536f-4d26-92e6-ca49b5f330b8"]
+  },
+  {
+    "id": "q-exact-08",
+    "query": "Library of Alexandria Ptolemaic Egypt",
+    "category": "exact_keyword",
+    "relevantIds": ["a788e529-5e44-42c3-a857-a0b07414d258"]
+  },
+  {
+    "id": "q-exact-09",
+    "query": "Reykjavik geothermal and hydroelectric energy",
+    "category": "exact_keyword",
+    "relevantIds": ["0e1f29b9-7b93-4662-9948-e615ade26ddd"]
+  },
+  {
+    "id": "q-exact-10",
+    "query": "Deglazing pan fond wine stock sauce",
+    "category": "exact_keyword",
+    "relevantIds": ["a90c3d81-57be-44fe-8a8b-05924e0dc80c"]
+  },
+
+  {
+    "id": "q-para-01",
+    "query": "vacuum sealed immersion preparation with precise thermal regulation",
+    "category": "paraphrase",
+    "relevantIds": ["5fa450b5-b9c5-46fd-9322-0846caf1b85f"]
+  },
+  {
+    "id": "q-para-02",
+    "query": "blending unmixable culinary liquids using phospholipid surfactants",
+    "category": "paraphrase",
+    "relevantIds": ["5e11810f-220a-454d-9294-f8f02309870d"]
+  },
+  {
+    "id": "q-para-03",
+    "query": "monarchical residence for a thousand years boasting sacred sanctuaries",
+    "category": "paraphrase",
+    "relevantIds": ["5e8372da-a8e1-415c-9819-8a2e93691c24"]
+  },
+  {
+    "id": "q-para-04",
+    "query": "vast submarine calcified ecosystem sprawling across Pacific shores",
+    "category": "paraphrase",
+    "relevantIds": ["d3632a5b-a143-4b86-af3b-92d2ce694cbe"]
+  },
+  {
+    "id": "q-para-05",
+    "query": "intercontinental overland mercantile corridors severed during fifteenth century",
+    "category": "paraphrase",
+    "relevantIds": ["9c8b6a04-90e9-4042-93dd-d021fee80ba1"]
+  },
+  {
+    "id": "q-para-06",
+    "query": "navigational isthmus cut eliminating long journeys around South America",
+    "category": "paraphrase",
+    "relevantIds": ["f088ac26-d03a-4e38-a465-be6f4a55627e"]
+  },
+  {
+    "id": "q-para-07",
+    "query": "vegetation transforming solar radiation into biochemical nourishment",
+    "category": "paraphrase",
+    "relevantIds": ["b3de0452-b86d-4bc9-800d-a9dbfb6629e5"]
+  },
+  {
+    "id": "q-para-08",
+    "query": "warping of cosmic fabric by celestial mass instead of pulling attraction",
+    "category": "paraphrase",
+    "relevantIds": ["bd688be3-d85e-439f-a93a-b3f69627de48"]
+  },
+  {
+    "id": "q-para-09",
+    "query": "shifting crustal slabs shaping planetary geography over epochs",
+    "category": "paraphrase",
+    "relevantIds": ["4eb63b78-6074-4e9f-9b02-de69e91ef261"]
+  },
+  {
+    "id": "q-para-10",
+    "query": "cellular hereditary blueprints packaged in pairs of nuclear thread bodies",
+    "category": "paraphrase",
+    "relevantIds": ["447a8ffa-e3aa-4db3-bc11-e5af19137dda"]
+  },
+
+  {
+    "id": "q-ent-01",
+    "query": "citadel situated 2430 meters above sea level in Peru",
+    "category": "entity_numeric",
+    "relevantIds": ["c0c0731f-2dcf-4d53-98af-9a9e2ab4329a"]
+  },
+  {
+    "id": "q-ent-02",
+    "query": "carved artifact decree from 196 BC in three ancient scripts",
+    "category": "entity_numeric",
+    "relevantIds": ["0ff6d387-50b8-41d7-bfd5-e8bd40e2f64d"]
+  },
+  {
+    "id": "q-ent-03",
+    "query": "1914 engineering project connecting Atlantic and Pacific oceans",
+    "category": "entity_numeric",
+    "relevantIds": ["f088ac26-d03a-4e38-a465-be6f4a55627e"]
+  },
+  {
+    "id": "q-ent-04",
+    "query": "city with 1600 Buddhist temples and 400 Shinto shrines",
+    "category": "entity_numeric",
+    "relevantIds": ["5e8372da-a8e1-415c-9819-8a2e93691c24"]
+  },
+  {
+    "id": "q-ent-05",
+    "query": "3 billion base pairs in 23 pairs of chromosomes",
+    "category": "entity_numeric",
+    "relevantIds": ["447a8ffa-e3aa-4db3-bc11-e5af19137dda"]
+  },
+  {
+    "id": "q-ent-06",
+    "query": "1440 movable type invention in Mainz by Gutenberg",
+    "category": "entity_numeric",
+    "relevantIds": ["cf9f35ad-5312-43dd-bef9-5b4fc54db693"]
+  },
+
+  {
+    "id": "q-filt-01",
+    "query": "browning reaction at high heat",
+    "category": "filtered",
+    "metadataFilter": { "category": "cooking", "topic": "chemistry" },
+    "relevantIds": ["273e840c-673b-4c7b-8f63-f008c3672c34", "9f36fd68-9c3d-4777-a8ed-7c17aa462924"]
+  },
+  {
+    "id": "q-filt-02",
+    "query": "fermented dough preparation technique",
+    "category": "filtered",
+    "metadataFilter": { "category": "cooking", "topic": "baking" },
+    "relevantIds": ["0b1216eb-2b75-46ce-9c8e-eb87b08ed307"]
+  },
+  {
+    "id": "q-filt-03",
+    "query": "ancient trade routes Eurasian commerce",
+    "category": "filtered",
+    "metadataFilter": { "category": "history", "topic": "trade" },
+    "relevantIds": ["9c8b6a04-90e9-4042-93dd-d021fee80ba1"]
+  },
+  {
+    "id": "q-filt-04",
+    "query": "ancient library and intellectual academy",
+    "category": "filtered",
+    "metadataFilter": { "category": "history", "topic": "ancient-world" },
+    "relevantIds": ["a788e529-5e44-42c3-a857-a0b07414d258"]
+  },
+  {
+    "id": "q-filt-05",
+    "query": "gravitational curvature of spacetime",
+    "category": "filtered",
+    "metadataFilter": { "category": "science", "topic": "physics" },
+    "relevantIds": ["bd688be3-d85e-439f-a93a-b3f69627de48"]
+  },
+  {
+    "id": "q-filt-06",
+    "query": "large scale motion of planetary crust lithosphere",
+    "category": "filtered",
+    "metadataFilter": { "category": "science", "topic": "geology" },
+    "relevantIds": ["4eb63b78-6074-4e9f-9b02-de69e91ef261"]
+  },
+
+  {
+    "id": "q-noans-01",
+    "query": "quantum entanglement and Bell inequality violations in quantum computing",
+    "category": "no_answer",
+    "relevantIds": []
+  },
+  {
+    "id": "q-noans-02",
+    "query": "Apollo 11 lunar module Eagle landing coordinates on the Sea of Tranquility",
+    "category": "no_answer",
+    "relevantIds": []
+  },
+  {
+    "id": "q-noans-03",
+    "query": "medieval brewing techniques for Belgian Trappist abbey ales",
+    "category": "no_answer",
+    "relevantIds": []
+  },
+  {
+    "id": "q-noans-04",
+    "query": "treaty terms of the Peace of Westphalia ending the Thirty Years War in 1648",
+    "category": "no_answer",
+    "relevantIds": []
+  },
+  {
+    "id": "q-noans-05",
+    "query": "geological composition and atmospheric pressure of Saturn moon Titan",
+    "category": "no_answer",
+    "relevantIds": []
+  },
+  {
+    "id": "q-noans-06",
+    "query": "architectural engineering of the Burj Khalifa skyscraper foundation in Dubai",
+    "category": "no_answer",
+    "relevantIds": []
+  }
+]

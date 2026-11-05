@@ -5,6 +5,7 @@ export interface OpenAIProviderConfig {
   baseUrl?: string;
   model?: string;
   embeddingModel?: string;
+  embeddingDimensions?: number;
   timeoutMs?: number;
 }
 
@@ -14,6 +15,7 @@ export class OpenAIProvider implements LLMProvider {
   private baseUrl: string;
   private model: string;
   private embeddingModel: string;
+  private embeddingDimensions: number;
   private timeoutMs: number;
 
   constructor(config?: OpenAIProviderConfig) {
@@ -26,6 +28,11 @@ export class OpenAIProvider implements LLMProvider {
     this.model = config?.model || process.env.OPENAI_MODEL || "gpt-3.5-turbo";
     this.embeddingModel =
       config?.embeddingModel || process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small";
+    this.embeddingDimensions =
+      config?.embeddingDimensions ??
+      (process.env.OPENAI_EMBEDDING_DIMENSIONS
+        ? parseInt(process.env.OPENAI_EMBEDDING_DIMENSIONS, 10)
+        : 384);
     this.timeoutMs = config?.timeoutMs || 10000;
   }
 
@@ -84,6 +91,7 @@ export class OpenAIProvider implements LLMProvider {
         body: JSON.stringify({
           model: this.embeddingModel,
           input: text,
+          dimensions: this.embeddingDimensions,
         }),
         signal: controller.signal,
       });
@@ -93,10 +101,15 @@ export class OpenAIProvider implements LLMProvider {
         throw new Error(`OpenAI Embeddings API error [${response.status}]: ${errorText}`);
       }
 
-      const data = (await response.json()) as any;
+      const data = (await response.json()) as { data?: Array<{ embedding?: number[] }> };
       const embedding = data.data?.[0]?.embedding;
       if (!embedding || !Array.isArray(embedding)) {
         throw new Error("Invalid response format from OpenAI Embeddings: missing vector");
+      }
+      if (embedding.length !== this.embeddingDimensions) {
+        throw new Error(
+          `OpenAI embedding dimension mismatch: expected ${this.embeddingDimensions}, but received ${embedding.length}`
+        );
       }
       return embedding;
     } finally {
