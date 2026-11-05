@@ -31,10 +31,14 @@ export class MockProvider implements LLMProvider {
     }
 
     if (options?.jsonMode || prompt.includes("JSON")) {
+      const matches = Array.from(prompt.matchAll(/\[Source \d+ \| ID: ([^\]]+)\]/g));
+      const extractedIds = matches.map((m) => m[1]);
+      const citations = extractedIds.slice(0, 2);
+
       return JSON.stringify({
         answer: `Deterministic mock answer responding to context.`,
         confidence: 0.95,
-        citations: ["seed-1", "seed-2"],
+        citations,
         summary: "Synthetic mock summary generated without external network dependencies.",
       });
     }

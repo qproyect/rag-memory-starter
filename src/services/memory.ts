@@ -13,6 +13,7 @@ export interface QueryOptions {
   topK?: number;
   metadataFilter?: Record<string, unknown>;
   rrfK?: number;
+  retrievalMode?: "hybrid" | "vector" | "text";
 }
 
 export class MemoryService {
@@ -54,15 +55,11 @@ export class MemoryService {
     return res.rows[0];
   }
 
-  /**
-   * Performs hybrid retrieval combining pgvector cosine distance and PostgreSQL full-text search,
-   * merged using Reciprocal Rank Fusion (RRF).
-   */
-  async hybridQuery(options: QueryOptions): Promise<ScoredMemory[]> {
-    const { query, topK = 5, metadataFilter, rrfK = 60 } = options;
-    const fetchLimit = Math.max(topK * 2, 20);
-
-    // 1. Semantic Vector Search
+  private async vectorSearch(
+    query: string,
+    metadataFilter: Record<string, unknown> | undefined,
+    limit: number
+  ): Promise<Array<MemoryRecord & { distance: number }>> {
     const queryEmbedding = await this.provider.embed(query);
     const vectorStr = `[${queryEmbedding.join(",")}]`;
 
@@ -78,11 +75,17 @@ export class MemoryService {
       vectorParams.push(JSON.stringify(metadataFilter));
     }
     vectorSql += ` ORDER BY distance ASC LIMIT $${vectorParams.length + 1}`;
-    vectorParams.push(fetchLimit);
+    vectorParams.push(limit);
 
-    const vectorResult = await pool.query<MemoryRecord>(vectorSql, vectorParams);
+    const result = await pool.query<MemoryRecord & { distance: number }>(vectorSql, vectorParams);
+    return result.rows;
+  }
 
-    // 2. Lexical Full-Text Search
+  private async textSearch(
+    query: string,
+    metadataFilter: Record<string, unknown> | undefined,
+    limit: number
+  ): Promise<Array<MemoryRecord & { rank: number }>> {
     let textSql = `
       SELECT id, text, metadata, created_at, updated_at,
              ts_rank_cd(tsv, plainto_tsquery('english', $1)) as rank
@@ -96,11 +99,49 @@ export class MemoryService {
       textParams.push(JSON.stringify(metadataFilter));
     }
     textSql += ` ORDER BY rank DESC LIMIT $${textParams.length + 1}`;
-    textParams.push(fetchLimit);
+    textParams.push(limit);
 
-    const textResult = await pool.query<MemoryRecord>(textSql, textParams);
+    const result = await pool.query<MemoryRecord & { rank: number }>(textSql, textParams);
+    return result.rows;
+  }
 
-    // 3. Reciprocal Rank Fusion
-    return reciprocalRankFusion(vectorResult.rows, textResult.rows, rrfK, topK);
+  /**
+   * Performs hybrid retrieval combining pgvector cosine distance and PostgreSQL full-text search,
+   * merged using Reciprocal Rank Fusion (RRF), or single-mode retrieval when specified.
+   */
+  async hybridQuery(options: QueryOptions): Promise<ScoredMemory[]> {
+    const { query, topK = 5, metadataFilter, rrfK = 60, retrievalMode = "hybrid" } = options;
+
+    if (retrievalMode === "vector") {
+      const vectorResults = await this.vectorSearch(query, metadataFilter, topK);
+      return vectorResults.map((row, idx) => ({
+        id: row.id,
+        text: row.text,
+        metadata: row.metadata,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        score: Number((1 - (row.distance ?? 0)).toFixed(6)),
+        vectorRank: idx + 1,
+      }));
+    }
+
+    if (retrievalMode === "text") {
+      const textResults = await this.textSearch(query, metadataFilter, topK);
+      return textResults.map((row, idx) => ({
+        id: row.id,
+        text: row.text,
+        metadata: row.metadata,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        score: Number(Number(row.rank ?? 0).toFixed(6)),
+        textRank: idx + 1,
+      }));
+    }
+
+    const fetchLimit = Math.max(topK * 2, 20);
+    const vectorResults = await this.vectorSearch(query, metadataFilter, fetchLimit);
+    const textResults = await this.textSearch(query, metadataFilter, fetchLimit);
+
+    return reciprocalRankFusion(vectorResults, textResults, rrfK, topK);
   }
 }
