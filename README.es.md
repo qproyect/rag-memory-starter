@@ -1,6 +1,36 @@
 # Servicio Minimalista de Memoria RAG
 
+[![CI](https://github.com/qproyect/rag-memory-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/qproyect/rag-memory-starter/actions/workflows/ci.yml)
+
 Un microservicio de memoria para Generación Aumentada por Recuperación (RAG) limpio y listo para producción, desarrollado con **Node.js 20**, **TypeScript (estricto)**, **Fastify** y **PostgreSQL 16 + pgvector**.
+
+---
+
+## Probalo en 2 minutos
+
+Iniciá el servicio y la base de datos:
+```bash
+docker compose up --build -d
+```
+
+Cargá 20 notas de ejemplo de dominio público en PostgreSQL:
+```bash
+docker compose exec app npm run db:seed:prod
+```
+
+Hacé una consulta de búsqueda híbrida (`POST /query`):
+```bash
+curl -X POST http://localhost:3000/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "cocción en agua control de temperatura", "topK": 3}'
+```
+
+Generá una respuesta RAG estructurada con validación de citas (`POST /answer`):
+```bash
+curl -X POST http://localhost:3000/answer \
+  -H "Content-Type: application/json" \
+  -d '{"query": "¿Cómo funciona la técnica de sous-vide?", "topK": 2}'
+```
 
 Este repositorio demuestra patrones de ingeniería de IA aplicada para la persistencia y recuperación contextual de memorias:
 1. **Búsqueda Híbrida**: Búsqueda por texto completo nativa de PostgreSQL (`tsvector`) combinada con búsqueda vectorial semántica (distancia coseno con `pgvector`).
@@ -60,7 +90,7 @@ Esto iniciará la base de datos con la extensión `vector` habilitada y el servi
 Para poblar la base con 20 notas de dominio público (química culinaria, geografía y hechos históricos):
 
 ```bash
-docker compose exec app npm run db:seed
+docker compose exec app npm run db:seed:prod
 ```
 
 O si estás ejecutando en el entorno local:

@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { pool } from "./client.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -46,7 +46,7 @@ export async function runMigrations(): Promise<void> {
 }
 
 // Execute directly if run via CLI
-if (process.argv[1] && process.argv[1].endsWith("migrate.ts")) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runMigrations()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
